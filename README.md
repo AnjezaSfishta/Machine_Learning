@@ -190,14 +190,14 @@ df['month'] = df['Datetime (UTC)'].dt.month
 df['weekday'] = df['Datetime (UTC)'].dt.weekday
 </pre>
 
-## Authors
-- *Anjeza Sfishta*
-- *Erza Merovci*
-- *Fortesa Cena*
-
-
 - Nxirren komponentët e kohës nga kolona datetime
 - Këto përdoren si input për modele Machine Learning
 
 Rezultati:
 Dataset-i u pasurua me feature të rëndësishme për analizë të avancuar.
+
+## Authors
+- *Anjeza Sfishta*
+- *Erza Merovci*
+- *Fortesa Cena*
+
