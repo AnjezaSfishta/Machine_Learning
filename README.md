@@ -10,6 +10,7 @@
       <h3>Fakulteti i Inxhinierisë Elektrike dhe Kompjuterike</h3>
       <p>Inxhinieri Kompjuterike dhe Softuerike</p>
       <p><strong>Lënda:</strong> Machine Learning</p>
+      <p><strong>Profesor:</strong> Dr. Lule Ahmedi dhe MSc. Mërgim H. HOTI</p>
     </td>
  </tr>
 </table>
@@ -52,7 +53,7 @@ Qëllimi final i këtij projekti është ndërtimi i modeleve të Machine Learni
 
 ---
 
-## Para-procesimi i të dhënave
+## Faza e parë - Para-procesimi i të dhënave 
 
 Në këtë fazë është realizuar përgatitja e dataset-it për analiza dhe modelim. Janë ndërmarrë hapa për pastrim, transformim dhe strukturim të të dhënave.
 
