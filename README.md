@@ -38,7 +38,7 @@ Dataset-i i zgjedhur për këtë projekt është i lidhur me sistemin energjetik
 | :--- | :--- |
 | **Emri i Dataset-it** | Electricity Data for Kosovo |
 | **Burimi** | Electricity Maps |
-| **Përmbledhje** | Dataset kohor (time series) që përmban të dhëna mbi prodhimin e energjisë, carbon intensity dhe përqindjen e energjisë së rinovueshme. |
+| **Përmbledhje** | Dataset kohor (time series) që përmban të dhëna mbi prodhimin e energjisë, intensitetin e karbonit dhe përqindjen e energjisë së rinovueshme. |
 
 ---
 
@@ -117,7 +117,7 @@ Janë larguar kolonat që nuk kontribuojnë në analizë ose modelim.
     'Data estimation method'
 ]) </pre>
 
-Këto kolona përmbajnë metadata që nuk përdoren në analizë
+Këto kolona përmbajnë metadata që nuk përdoren në analizë.                                                                                                                                   
 Reduktohet kompleksiteti i dataset-it
 
 Rezultati:
@@ -189,6 +189,12 @@ df['day'] = df['Datetime (UTC)'].dt.day
 df['month'] = df['Datetime (UTC)'].dt.month
 df['weekday'] = df['Datetime (UTC)'].dt.weekday
 </pre>
+
+## Authors
+- *Anjeza Sfishta*
+- *Erza Merovci*
+- *Fortesa Cena*
+
 
 - Nxirren komponentët e kohës nga kolona datetime
 - Këto përdoren si input për modele Machine Learning
