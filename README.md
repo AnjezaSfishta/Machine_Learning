@@ -65,7 +65,8 @@ Në këtë fazë është realizuar përgatitja e dataset-it për analiza dhe mod
 
 U analizua struktura e dataset-it për të kuptuar tipin e secilës kolonë.
 
-![alt text](image.png)
+<img width="556" height="417" alt="image" src="https://github.com/user-attachments/assets/fe1401ad-f580-4301-903c-06628157c9c1" />
+
 
 Rezultati:
 U identifikua që kolona Datetime (UTC) nuk ishte në format të duhur dhe kërkonte konvertim.
@@ -74,7 +75,7 @@ U identifikua që kolona Datetime (UTC) nuk ishte në format të duhur dhe kërk
 
 Për të mundësuar analizë kohore, kolona e datës dhe kohës u konvertua në format datetime.
 
-<pre> ```python df['Datetime (UTC)'] = pd.to_datetime(df['Datetime (UTC)']) ``` </pre>
+<pre> python df['Datetime (UTC)'] = pd.to_datetime(df['Datetime (UTC)']) </pre>
 
 - Funksioni pd.to_datetime() konverton të dhënat në format të standardizuar të kohës
 - Ky hap është i domosdoshëm për operacione si resampling dhe analiza kohore
@@ -86,7 +87,7 @@ Dataset-i tani mund të përdoret për analiza time-series dhe grupime sipas koh
 
 Për çdo kolonë u llogarit përqindja e vlerave mungese për të vendosur metodën e duhur të pastrimit.
 
-![alt text](image-1.png)
+<img width="720" height="412" alt="image" src="https://github.com/user-attachments/assets/4f9da2dc-b4e4-4b31-99b9-649a2b0ffa6d" />
 
 - isnull().sum() tregon numrin e vlerave të mungura për çdo kolonë
 - Llogaritja e përqindjes ndihmon në vendimmarrje për trajtim
@@ -98,7 +99,7 @@ U identifikuan kolona 'Data estimation method' me përqindje të lartë të vler
 
 Ky hap siguron që dataset-i nuk përmban rreshta të përsëritur.
 
-```print(df.duplicated().sum())```
+<img width="297" height="122" alt="image" src="https://github.com/user-attachments/assets/748f0d89-e920-4836-ab36-825cb961a34e" />
 
 - duplicated() identifikon rreshtat që janë të njëjtë
 - .sum() jep numrin total të tyre
@@ -110,11 +111,11 @@ U konfirmua se nuk ka duplicate.
 
 Janë larguar kolonat që nuk kontribuojnë në analizë ose modelim.
 
-<pre> ``` df = df.drop(columns=[
+<pre> df = df.drop(columns=[
     'Data source',
     'Data estimated',
     'Data estimation method'
-]) ``` </pre>
+]) </pre>
 
 Këto kolona përmbajnë metadata që nuk përdoren në analizë
 Reduktohet kompleksiteti i dataset-it
@@ -126,7 +127,7 @@ Dataset-i u thjeshtua dhe u fokusua në variabla relevante.
 
 Fokus në kolonat që lidhen me energjinë dhe ndikimin mjedisor.
 
-<pre> ```
+<pre>
 important_cols = [
     'Carbon intensity gCO₂eq/kWh (direct)',
     'Carbon intensity gCO₂eq/kWh (Life cycle)',
@@ -134,7 +135,7 @@ important_cols = [
     'Renewable energy percentage (RE%)'
 ]
 
-print(df[important_cols].describe()) ```</pre>
+print(df[important_cols].describe()) </pre>
 
 
 - 'describe()' jep statistika bazike si mesatarja, minimumi dhe maksimumi.
@@ -147,7 +148,7 @@ U fitua një pasqyrë e qartë mbi sjelljen e variablave kryesorë.
 
 Të dhënat u grupuan në nivel ditor për analizë më të thjeshtë.
 
-<pre> ``` daily = df.resample('D', on='Datetime (UTC)').mean(numeric_only=True) ```</pre>
+<pre> daily = df.resample('D', on='Datetime (UTC)').mean(numeric_only=True) </pre>
 
 - resample('D') - grupizon të dhënat sipas ditëve
 - mean() - llogarit mesataren për çdo ditë
@@ -159,7 +160,7 @@ U krijua një dataset i ri me vlera ditore, më i përshtatshëm për analizë d
 
 Vizualizim i trendit të carbon intensity.
 
-<pre> ```
+<pre>
 import matplotlib.pyplot as plt
 
 daily['Carbon intensity gCO₂eq/kWh (direct)'].plot()
@@ -167,8 +168,10 @@ plt.title("Intensiteti ditor i karbonit")
 plt.xlabel("Data")
 plt.ylabel("gCO₂eq/kWh")
 plt.show()
-```
 </pre>
+
+<img width="569" height="490" alt="image" src="https://github.com/user-attachments/assets/9bb1e95d-1ccd-4179-b238-2dc30f4b648f" />
+
 
 - Krijohet një grafik kohor (time series)
 - Ndihmon në identifikimin e trendeve dhe anomalive
@@ -181,12 +184,10 @@ U identifikuan variacionet dhe trendet në kohë.
 Krijimi i variablave të reja nga data dhe koha.
 
 <pre>
-```
 df['hour'] = df['Datetime (UTC)'].dt.hour
 df['day'] = df['Datetime (UTC)'].dt.day
 df['month'] = df['Datetime (UTC)'].dt.month
 df['weekday'] = df['Datetime (UTC)'].dt.weekday
-```
 </pre>
 
 - Nxirren komponentët e kohës nga kolona datetime
