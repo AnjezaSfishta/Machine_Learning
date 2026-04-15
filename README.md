@@ -201,7 +201,8 @@ Në këtë pjesë fokusi është në identifikimin dhe trajtimin e vlerave ekstr
 
 Para identifikimit të anomalive, u realizua një analizë vizuale për të kuptuar shpërndarjen e të dhënave.
 
-![alt text](image.png)
+<img width="651" height="496" alt="image" src="https://github.com/user-attachments/assets/b8a626c2-f126-4c6b-b697-c3aaff872e15" />
+
 
 Ky vizualizim tregon:
 - Medianën e të dhënave
@@ -210,22 +211,7 @@ Ky vizualizim tregon:
 
 Boxplot-i është një mënyrë e shpejtë dhe efektive për të identifikuar anomalitë në mënyrë vizuale.
 
-#### 9.2. Zbulimi i Anomalive me Metodën IQR
-
-Për identifikimin e anomalive u përdor metoda IQR (Interquartile Range).
-
-![alt text](image.png)
-
-Shpjegim i parametrave:
-- Q1 (30%) → kufiri i poshtëm i shpërndarjes
-- Q3 (70%) → kufiri i sipërm i shpërndarjes
-- IQR → diferenca midis Q3 dhe Q1
-- Lower Bound → kufiri minimal i pranueshëm
-- Upper Bound → kufiri maksimal i pranueshëm
-
-Çdo vlerë jashtë intervalit [lower_bound, upper_bound] konsiderohet anomali.
-
-#### 9.3. Analiza e Përqindjes së Anomalive
+#### 9.2. Analiza e Përqindjes së Anomalive
 
 Për të kuptuar ndikimin e anomalive në dataset:
 
@@ -241,7 +227,7 @@ Rezultat:
 Dataset-i është kryesisht i pastër
 Heqja e anomalive nuk ndikon ndjeshëm në humbjen e informacionit
 
-#### 9.4. Krijimi i Dataset-it pa Anomali
+#### 9.3. Krijimi i Dataset-it pa Anomali
 
 Hiqen rreshtat që përmbajnë vlera ekstreme:
 
@@ -264,10 +250,13 @@ Krahasimi: Para vs Pas Heqjes së Anomalive
 import matplotlib.pyplot as plt
 
 - Para heqjes
- FOTOO
+
+<img width="661" height="559" alt="image" src="https://github.com/user-attachments/assets/aa75518f-bd0a-4a9b-8c3f-161f3873138d" />
 
 - Pas heqjes
- fOTOO
+
+<img width="657" height="551" alt="image" src="https://github.com/user-attachments/assets/bd94369d-3f9c-41b0-8452-aba711eafb69" />
+
 
 Analiza e rezultateve:
 
@@ -332,7 +321,7 @@ Më poshtë paraqiten disa nga vizualizimet kryesore që ndihmojnë në interpre
 #### Model Performance Comparison
 Ky vizualizim paraqet një krahasim të drejtpërdrejtë të performancës së dy modeleve, Random Forest dhe Gradient Boosting, duke përdorur metrika kryesore si Accuracy, F1-score, Recall dhe Precision.
 
-FOTOO
+<img width="771" height="382" alt="image" src="https://github.com/user-attachments/assets/d6fc2487-b9ed-4175-815c-f95e0679044f" />
 
 Në këtë grafik, boshti horizontal përfaqëson modelet, ndërsa boshti vertikal tregon vlerat e metrikave (nga 0 në 1). Secila metrikë është e paraqitur me një bar të veçantë, duke lejuar një krahasim të qartë vizual midis modeleve.
 
@@ -341,7 +330,7 @@ Rezultatet tregojnë se të dy modelet kanë performancë shumë të lartë, me 
 #### Confusion Matrix (Heatmap)
 Confusion Matrix është një nga vizualizimet më të rëndësishme për klasifikim, pasi tregon në mënyrë të detajuar se si modeli ka bërë parashikimet.
 
-FOTOO
+<img width="772" height="280" alt="image" src="https://github.com/user-attachments/assets/5561a780-d7d2-4750-8d39-9150ff8e97d6" />
 
 Grafiku është një matricë 2x2 ku:
 
@@ -360,7 +349,7 @@ Në këtë projekt, vlerat në diagonale janë shumë të larta, ndërsa gabimet
 #### ROC Curve
 ROC Curve (Receiver Operating Characteristic) tregon aftësinë e modelit për të dalluar midis klasave në nivele të ndryshme të pragut të vendimmarrjes.
 
-FOTOO
+<img width="766" height="537" alt="image" src="https://github.com/user-attachments/assets/0ddda1a7-c861-425b-a724-831e404df153" />
 
 Boshti horizontal paraqet False Positive Rate, ndërsa boshti vertikal paraqet True Positive Rate. Një model i mirë do të ketë kurbën sa më afër këndit të sipërm të majtë.
 
@@ -369,7 +358,7 @@ Në këtë projekt, të dy modelet kanë kurba shumë të ngritura, me AUC shum�
 #### Actual vs Predicted (Time Series Plot)
 Ky grafik paraqet krahasimin midis vlerave reale dhe atyre të parashikuara në një periudhë kohore (zakonisht një pjesë e dataset-it testues).
 
-FOTOO
+<img width="779" height="438" alt="image" src="https://github.com/user-attachments/assets/be87de71-67bb-41ea-a70b-6e07384151d0" />
 
 Boshti horizontal përfaqëson kohën (indeksin e mostrave), ndërsa boshti vertikal klasën (0 ose 1). Dy linja paraqesin:
 
