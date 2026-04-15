@@ -193,8 +193,197 @@ df['weekday'] = df['Datetime (UTC)'].dt.weekday
 - Nxirren komponentët e kohës nga kolona datetime
 - Këto përdoren si input për modele Machine Learning
 
+### 9. Zbulimi dhe heqja e outliers
+
+Në këtë pjesë fokusi është në identifikimin dhe trajtimin e vlerave ekstreme (anomali), të cilat mund të ndikojnë negativisht në performancën dhe saktësinë e modeleve të Machine Learning.
+
+#### 9.1. Vizualizimi i Shpërndarjes (Boxplot)
+
+Para identifikimit të anomalive, u realizua një analizë vizuale për të kuptuar shpërndarjen e të dhënave.
+
+![alt text](image.png)
+
+Ky vizualizim tregon:
+- Medianën e të dhënave
+- Shpërndarjen (range)
+- Vlerat ekstreme (potential outliers)
+
+Boxplot-i është një mënyrë e shpejtë dhe efektive për të identifikuar anomalitë në mënyrë vizuale.
+
+#### 9.2. Zbulimi i Anomalive me Metodën IQR
+
+Për identifikimin e anomalive u përdor metoda IQR (Interquartile Range).
+
+![alt text](image.png)
+
+Shpjegim i parametrave:
+- Q1 (30%) → kufiri i poshtëm i shpërndarjes
+- Q3 (70%) → kufiri i sipërm i shpërndarjes
+- IQR → diferenca midis Q3 dhe Q1
+- Lower Bound → kufiri minimal i pranueshëm
+- Upper Bound → kufiri maksimal i pranueshëm
+
+Çdo vlerë jashtë intervalit [lower_bound, upper_bound] konsiderohet anomali.
+
+#### 9.3. Analiza e Përqindjes së Anomalive
+
+Për të kuptuar ndikimin e anomalive në dataset:
+
+<pre>
+outlier_percentage = df['is_outlier'].mean() * 100
+print(f"Outliers: {outlier_percentage:.2f}%")
+</pre>
+
+Rezultat:
+
+🔹 0.81% e të dhënave janë anomali
+
+Dataset-i është kryesisht i pastër
+Heqja e anomalive nuk ndikon ndjeshëm në humbjen e informacionit
+
+#### 9.4. Krijimi i Dataset-it pa Anomali
+
+Hiqen rreshtat që përmbajnë vlera ekstreme:
+
+<pre>
+df_no_outliers = df[df['is_outlier'] == False].copy()
+df_no_outliers.to_csv("df_no_outliers.csv", index=False)
+</pre>
+
+Procesi:
+- Filtrim i të dhënave normale
+- Krijimi i dataset-it të ri
+- Ruajtja për përdorim të mëtejshëm
+
+👉 Dataset-i i ri është më i pastër dhe më i përshtatshëm për modelim.
+
+Krahasimi: Para vs Pas Heqjes së Anomalive
+
+#### 9.5. Vizualizimi i ndikimit të pastrimit të të dhënave:
+
+import matplotlib.pyplot as plt
+
+- Para heqjes
+ FOTOO
+
+- Pas heqjes
+ fOTOO
+
+Analiza e rezultateve:
+
+- Reduktohet “noise”
+- Trendet reale bëhen më të dukshme
+- Përmirësohet cilësia e input-it për modele
+
 Rezultati:
 Dataset-i u pasurua me feature të rëndësishme për analizë të avancuar.
+
+
+## Faza e dytë - Trajnimi i modelit
+
+Kjo faze fokusohet ne analizen dhe modelimin e të dhënave te energjisë elektrike në Kosovë, me fokus në parashikimin e intensitetit të karbonit, i cili shërben si indikator i rëndësishëm për modelet e konsumit dhe prodhimit të energjisë elektrike.
+
+Faza e dyte përfshin përgatitjen e të dhënave, ndërtimin i modeleve, vlerësimin e performancës dhe interpretimin e rezultateve.
+
+### Supervised Learning – Klasifikimi i Intensitetit të Karbonit
+
+Problemi është trajtuar si klasifikim binar, ku intensiteti i karbonit ndahet në “High” dhe “Low” duke përdorur medianën si prag. Kjo zgjedhje siguron një dataset të balancuar dhe ndihmon modelet të performojnë në mënyrë stabile.
+
+Dataset-i përmban 8,689 mostra dhe është ndarë në trajnim dhe testim me raport 80/20, duke ruajtur balancën e klasave. Përpara modelimit, të dhënat janë standardizuar për të përmirësuar performancën e algoritmeve.
+
+Një pjesë e procesit të përgatitjes paraqitet më poshtë:
+<pre>
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+</pre>
+
+Janë përdorur dy modele kryesore: Random Forest dhe Gradient Boosting. Random Forest është zgjedhur për stabilitet dhe interpretueshmëri, ndërsa Gradient Boosting për performancë më të lartë dhe aftësi për të kapur marrëdhënie komplekse.
+
+Trajnimi i modelit Random Forest është bërë si më poshtë:
+<pre>
+from sklearn.ensemble import RandomForestClassifier
+
+rf_model = RandomForestClassifier(n_estimators=100, max_depth=15, random_state=42)
+rf_model.fit(X_train_scaled, y_train)
+</pre>
+
+Rezultatet tregojnë performancë jashtëzakonisht të lartë për të dy modelet. Accuracy është mbi 99.7%, ndërsa metrikat e tjera si precision, recall dhe F1-score janë pothuajse perfekte. Gradient Boosting arrin një AUC prej 1.0, që nënkupton ndarje ideale të klasave.
+
+### Rezultatet e Modeleve
+
+| Model              | Accuracy | F1-Score | Recall  | Precision | AUC    |
+|--------------------|----------|----------|---------|-----------|--------|
+| Random Forest      | 99.77%   | 0.9977   | 99.77%  | 99.77%    | 0.9993 |
+| Gradient Boosting  | 99.71%   | 0.9971   | 99.88%  | 99.54%    | 1.0000 |
+
+Rezultati: Të dy modelet janë pothuajse perfekte, me Gradient Boosting që performon pak më mirë në identifikimin e rasteve “High”.
+
+### Vizualizimet
+Më poshtë paraqiten disa nga vizualizimet kryesore që ndihmojnë në interpretimin e modeleve:
+
+#### Model Performance Comparison
+Ky vizualizim paraqet një krahasim të drejtpërdrejtë të performancës së dy modeleve, Random Forest dhe Gradient Boosting, duke përdorur metrika kryesore si Accuracy, F1-score, Recall dhe Precision.
+
+FOTOO
+
+Në këtë grafik, boshti horizontal përfaqëson modelet, ndërsa boshti vertikal tregon vlerat e metrikave (nga 0 në 1). Secila metrikë është e paraqitur me një bar të veçantë, duke lejuar një krahasim të qartë vizual midis modeleve.
+
+Rezultatet tregojnë se të dy modelet kanë performancë shumë të lartë, me vlera pothuajse identike. Random Forest paraqet një balancë të plotë midis metrikave, ndërsa Gradient Boosting ka një avantazh të vogël në Recall, që nënkupton se është më efektiv në identifikimin e rasteve me intensitet të lartë të karbonit.
+
+#### Confusion Matrix (Heatmap)
+Confusion Matrix është një nga vizualizimet më të rëndësishme për klasifikim, pasi tregon në mënyrë të detajuar se si modeli ka bërë parashikimet.
+
+FOTOO
+
+Grafiku është një matricë 2x2 ku:
+
+- Boshti horizontal përfaqëson klasat e parashikuara
+- Boshti vertikal përfaqëson klasat reale
+
+Katër komponentët kryesorë janë:
+
+- True Positives (rastet High të parashikuara saktë)
+- True Negatives (rastet Low të parashikuara saktë)
+- False Positives (rastet Low të klasifikuara gabimisht si High)
+- False Negatives (rastet High të klasifikuara gabimisht si Low)
+
+Në këtë projekt, vlerat në diagonale janë shumë të larta, ndërsa gabimet janë minimale (vetëm disa raste nga mbi 1700). Kjo tregon që modeli ka performancë pothuajse perfekte.
+
+#### ROC Curve
+ROC Curve (Receiver Operating Characteristic) tregon aftësinë e modelit për të dalluar midis klasave në nivele të ndryshme të pragut të vendimmarrjes.
+
+FOTOO
+
+Boshti horizontal paraqet False Positive Rate, ndërsa boshti vertikal paraqet True Positive Rate. Një model i mirë do të ketë kurbën sa më afër këndit të sipërm të majtë.
+
+Në këtë projekt, të dy modelet kanë kurba shumë të ngritura, me AUC shumë afër 1. Gradient Boosting arrin AUC = 1.0, që tregon ndarje perfekte të klasave.
+
+#### Actual vs Predicted (Time Series Plot)
+Ky grafik paraqet krahasimin midis vlerave reale dhe atyre të parashikuara në një periudhë kohore (zakonisht një pjesë e dataset-it testues).
+
+FOTOO
+
+Boshti horizontal përfaqëson kohën (indeksin e mostrave), ndërsa boshti vertikal klasën (0 ose 1). Dy linja paraqesin:
+
+- vlerat reale
+- vlerat e parashikuara nga modeli
+
+Ketu linjat janë pothuajse të mbivendosura, që tregon përputhje shumë të lartë midis realitetit dhe parashikimeve.
+
+### Rezultati
+Analiza e këtyre vizualizimeve tregon se modelet jo vetëm që janë shumë të sakta, por edhe shumë të sigurta në vendimet e tyre. Probabilitetet janë të qarta (afër 0 ose 1), ndërsa gabimet janë minimale.
+
+Një insight shumë i rëndësishëm është se veçoria Carbon intensity (Life cycle) dominon në parashikim, duke kontribuar në pjesën më të madhe të vendimeve të modelit.
+
+### Unsupervised Learning – Clustering
 
 ## Authors
 - *Anjeza Sfishta*
