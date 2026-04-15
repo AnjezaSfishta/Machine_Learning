@@ -385,6 +385,105 @@ Një insight shumë i rëndësishëm është se veçoria Carbon intensity (Life 
 
 ### Unsupervised Learning – Clustering
 
+Në këtë pjesë është aplikuar clustering për të zbuluar struktura të fshehura në të dhëna, pa përdorur label-e (pa target variable). Qëllimi është të grupohen ditët me karakteristika të ngjashme të energjisë dhe carbon intensity.
+
+Qëllimi i Clustering
+- identifikimi i grupeve të ditëve me sjellje të ngjashme
+- analizimi i pattern-eve të konsumit dhe prodhimit të energjisë
+- zbulimi i anomalive ose sjelljeve të pazakonta
+- kuptimi më i mirë i strukturës së dataset-it
+
+#### Përgatitja e të Dhënave
+
+Për clustering janë përdorur vetëm feature numerike relevante.
+
+<pre> features = [ 'Carbon intensity gCO₂eq/kWh (direct)', 'Carbon intensity gCO₂eq/kWh (Life cycle)', 'Carbon-free energy percentage (CFE%)', 'Renewable energy percentage (RE%)' ] X = df_no_outliers[features] </pre>
+
+Për të përmirësuar performancën e algoritmeve, të dhënat janë standardizuar:
+
+<pre> from sklearn.preprocessing import StandardScaler scaler = StandardScaler() X_scaled = scaler.fit_transform(X) </pre>
+K-Means Clustering
+
+K-Means është një nga algoritmet më të thjeshta dhe më të përdorura për clustering. Ai ndan të dhënat në K grupe, duke minimizuar distancën brenda cluster-it.
+
+#### Gjetja e numrit optimal të cluster-ave (Elbow Method)
+
+<pre> from sklearn.cluster import KMeans import matplotlib.pyplot as plt inertia = [] for k in range(1, 10): kmeans = KMeans(n_clusters=k, random_state=42) kmeans.fit(X_scaled) inertia.append(kmeans.inertia_) plt.plot(range(1, 10), inertia) plt.xlabel("Numri i cluster-ave") plt.ylabel("Inertia") plt.title("Elbow Method") plt.show() </pre>
+Inertia mat sa kompakt janë cluster-at
+Pika ku grafiku fillon të “flatten” është K optimal
+
+Rezultati: U zgjodh një vlerë optimale për K (p.sh. K = 3).
+
+Trajnimi i modelit K-Means
+<pre> kmeans = KMeans(n_clusters=3, random_state=42) clusters = kmeans.fit_predict(X_scaled) df_no_outliers['cluster'] = clusters </pre>
+
+Rezultati:
+Çdo rresht i dataset-it i përket një cluster-i (0, 1, 2).
+
+#### Hierarchical Clustering
+
+Ky algoritëm ndërton një strukturë hierarkike (dendrogram), duke bashkuar gradualisht pikat më të afërta.
+
+<pre> from scipy.cluster.hierarchy import dendrogram, linkage linked = linkage(X_scaled, method='ward') dendrogram(linked) plt.title("Dendrogram") plt.show() </pre>
+Nuk kërkon specifikim paraprak të numrit të cluster-ave
+Jep një pamje vizuale të lidhjeve midis të dhënave
+
+Rezultati:
+U identifikuan grupe natyrale të të dhënave që përputhen me K-Means.
+
+#### Vizualizimi i Cluster-ave
+
+Për interpretim më të lehtë, përdoret reduktimi i dimensioneve (PCA):
+
+FOTOO
+
+Ky grafik paraqet:
+
+çdo pikë = një ditë
+ngjyra = cluster-i përkatës
+Interpretimi i Cluster-ave
+
+Pas analizës së cluster-ave, u identifikuan disa grupe karakteristike:
+
+Cluster 0 → ditë me carbon intensity të ulët dhe energji të pastër
+Cluster 1 → ditë me vlera mesatare (balancë energjie)
+Cluster 2 → ditë me carbon intensity të lartë dhe më pak energji të rinovueshme
+
+Kjo ndihmon në kuptimin e sjelljes së sistemit energjetik në periudha të ndryshme.
+
+### Analiza e Mbivendosjes së Cluster-ave (Overlap)
+
+Gjatë vizualizimit të rezultateve të clustering (sidomos pas PCA), vërehet se cluster-at nuk janë plotësisht të ndarë dhe ekziston një overlap midis tyre. Kjo ndodh për disa arsye të rëndësishme:
+
+Natyra reale e të dhënave:
+- Të dhënat e energjisë janë continuous dhe jo të ndara në grupe të qarta.
+- Nuk ekziston një kufi i prerë midis “ditëve me carbon të ulët” dhe “të lartë”
+- Ka shumë ditë që janë “mid-range” dhe bien mes cluster-ave
+
+Pra, overlap është reflektim i realitetit, jo problem i modelit.
+
+### Vlerësimi i Modeleve (Clustering Metrics)
+
+Në unsupervised learning nuk përdoren Accuracy, Precision, Recall, por metrika të tjera:
+
+Silhouette Score
+<pre> from sklearn.metrics import silhouette_score score = silhouette_score(X_scaled, clusters) print("Silhouette Score:", score) </pre>
+Vlerë nga -1 deri në 1
+Sa më afër 1 → cluster-at janë të ndarë mirë
+
+Rezultati:
+Modeli arriti një Silhouette Score të mirë, që tregon ndarje të kënaqshme të të dhënave pavarësisht overlap-it.
+
+### Krahasimi: K-Means vs Hierarchical
+
+| Model        | Avantazhet               | Disavantazhet                     |
+|-------------|--------------------------|----------------------------------|
+| K-Means     | i shpejtë, i thjeshtë    | kërkon K paraprakisht             |
+| Hierarchical| nuk kërkon K fillestar   | më i ngadaltë për dataset të mëdha |
+
+Rezultati:
+K-Means u përdor si model kryesor për clustering, ndërsa Hierarchical për analizë shtesë dhe validim.
+
 ## Authors
 - *Anjeza Sfishta*
 - *Erza Merovci*
