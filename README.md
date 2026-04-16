@@ -424,7 +424,7 @@ U identifikuan grupe natyrale të të dhënave që përputhen me K-Means.
 
 Për interpretim më të lehtë, përdoret reduktimi i dimensioneve (PCA):
 
-FOTOO
+<img width="1427" height="847" alt="image" src="https://github.com/user-attachments/assets/ef67af58-47bf-4b3a-818c-d5e2ed290660" />
 
 Ky grafik paraqet:
 
@@ -434,9 +434,8 @@ Interpretimi i Cluster-ave
 
 Pas analizës së cluster-ave, u identifikuan disa grupe karakteristike:
 
-Cluster 0 → ditë me carbon intensity të ulët dhe energji të pastër
-Cluster 1 → ditë me vlera mesatare (balancë energjie)
-Cluster 2 → ditë me carbon intensity të lartë dhe më pak energji të rinovueshme
+- Cluster 0 → ditë me carbon intensity të ulët dhe energji të pastër
+- Cluster 1 → ditë me carbon intensity të lartë dhe më pak energji të rinovueshme
 
 Kjo ndihmon në kuptimin e sjelljes së sistemit energjetik në periudha të ndryshme.
 
