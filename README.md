@@ -17,6 +17,8 @@
 
 ---
 
+# Analiza dhe Parashikimi i Intensitetit të Karbonit në Energjinë Elektrike
+
 ## Përshkrim i përgjithësuar i projektit
 Ky projekt realizohet në kuadër të lëndës “Machine Learning” dhe fokusohet në analizën dhe përpunimin e të dhënave reale të energjisë elektrike në Kosovë. 
 
