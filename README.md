@@ -10,7 +10,8 @@
       <h3>Fakulteti i Inxhinierisë Elektrike dhe Kompjuterike</h3>
       <p>Inxhinieri Kompjuterike dhe Softuerike</p>
       <p><strong>Lënda:</strong> Machine Learning</p>
-      <p><strong>Profesor:</strong> Prof. Dr. Lule AHMEDI dhe Dr. Sc. Mërgim H. HOTI</p>
+      <p><strong>Profesor:</strong> Prof. Dr. Lule AHMEDI </p>
+     <p><strong>Asistent:</strong> Dr. Sc. Mërgim H. HOTI </p>
     </td>
  </tr>
 </table>
