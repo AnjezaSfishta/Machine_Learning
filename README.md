@@ -407,18 +407,70 @@ Trajnimi i modelit K-Means
 <pre> kmeans = KMeans(n_clusters=3, random_state=42) clusters = kmeans.fit_predict(X_scaled) df_no_outliers['cluster'] = clusters </pre>
 
 Rezultati:
-Çdo rresht i dataset-it i përket një cluster-i (0, 1, 2).
 
-#### Hierarchical Clustering
+### Tuning i parametrave per Random Forest dhe Gradient Boosting
 
-Ky algoritëm ndërton një strukturë hierarkike (dendrogram), duke bashkuar gradualisht pikat më të afërta.
+Ne notebook eshte shtuar nje test me i gjere i parametrave per te provuar jo vetem `n_estimators`, por edhe variabla tjera te rendesishme:
 
-<pre> from scipy.cluster.hierarchy import dendrogram, linkage linked = linkage(X_scaled, method='ward') dendrogram(linked) plt.title("Dendrogram") plt.show() </pre>
-Nuk kërkon specifikim paraprak të numrit të cluster-ave
-Jep një pamje vizuale të lidhjeve midis të dhënave
+- `max_depth`
+- `min_samples_split`
+- `max_features`
+- `bootstrap`
+- `learning_rate`
+- `subsample`
 
-Rezultati:
-U identifikuan grupe natyrale të të dhënave që përputhen me K-Means.
+Kjo ndihmon te kuptohet se si ndryshon performanca kur ndryshohen parametrat kryesor te modeleve.
+
+#### Pse u testuan keto parametra?
+
+- `n_estimators` kontrollon sa peme ose iteracione perdor modeli.
+- `learning_rate` ne Gradient Boosting percakton sa shpejt mesimi perditesohet.
+- `max_depth` dhe `min_samples_split` ndikojne ne thellesine dhe kompleksitetin e pemeve.
+- `max_features` dhe `subsample` reduktojne variancen dhe ndihmojne kunder overfitting.
+- `bootstrap` kontrollon nese Random Forest perdor mostra me zevendesim.
+
+#### Cfare u vu re
+
+- Nje rritje e `n_estimators` zakonisht ofron performance me te mire deri ne nje pike stabilizimi.
+- `learning_rate` me i vogel shpesh kerkon `n_estimators` me te larte, por mund te rezultoje ne model me te qendrueshem.
+- `max_depth` me i madh mund te rrise overfitting; per kete dataset, nje thellesi mesatare zakonisht eshte me e sigurt.
+- `max_features='sqrt'` dhe `subsample=0.8` mund te permiresojne stabilitetin pa humbur shume saktesi.
+
+#### Si duket krahasimi
+
+Ne fund te testimit, percaktohet konfigurimi me i mire sipas metrikave te performances dhe shfaqet tabela e rezultateve per secilin kombinim parametrash.
+
+Kjo menyre testimi eshte me e dobishme per te gjetur kombinimin optimal dhe per te shpjeguar pse disa konfigurime punojne me mire se te tjerat.
+
+#### Si te japim peshe rezultateve
+
+Kur vleresohen konfigurimet, nuk duhet te mbeshtetemi vetem ne `Accuracy`. Duhet te konsiderohen:
+
+- `F1`: balance midis `Precision` dhe `Recall`
+- `Precision`: sa sakte jane parashikimet pozitive
+- `Recall`: sa mire modeli kap rastet pozitive
+- Stabiliteti: nese rezultatet ndryshojne shume per variante te ngjashme
+
+Nese nje konfigurim ka `Accuracy` me te larte dhe gjithashtu `F1`, `Precision` dhe `Recall` te qendrueshme, atehere ai konfigurim konsiderohet me i besueshem.
+
+#### Pse performoi me mire konfigurimi fitues
+
+- Konfigurimi me i mire zakonisht perdor nje balance te mire midis `n_estimators` dhe `max_depth`.
+- `Gradient Boosting` performon me mire kur ka `learning_rate` te moderuar dhe `subsample` te pershtatshem, sepse kap me gradualisht marredheniet komplekse dhe shmang overfitting.
+- `Random Forest` shpesh ishte me i qendrueshem, por `Gradient Boosting` mund te jepte avantazh ne raste ku modeli duhej te mesonte diferenca me te imeta midis `High` dhe `Low`.
+
+Kjo shpjegon pse nje model qe ka performance pak me te mire shpesh eshte ai qe balancon saktesine dhe generalizimin e mire.
+
+#### Klasterizimi i përdorur në `main.ipynb`
+
+Në këtë projekt nuk përdorim Hierarchical Clustering. Në `main.ipynb` është implementuar një krahasim midis dy metodave të tjera të rëndësishme të clustering:
+
+- `K-Means`: grupon të dhënat në bazë të distancës së pikave nga centri i secilit cluster
+- `Gaussian Mixture Model (GMM)`: kap shpërndarje gaussiane të ndjeshme në të dhëna dhe mund të identifikojë klustre të ndryshme në një mënyrë probabilistike
+
+Në kodin aktual, përzgjedhja e numrit optimal të klustereve bëhet me K = 2..15 dhe me metrikan si `Silhouette Score`, `Davies-Bouldin` dhe `Calinski-Harabasz`.
+
+Kjo qasje është më e saktë për dataset-in aktual, sepse i lejon modelet të krahasohen me njëri-tjetrin dhe të zgjidhet metoda që jep ndarje më të mirë të klustereve.
 
 #### Vizualizimi i Cluster-ave
 
