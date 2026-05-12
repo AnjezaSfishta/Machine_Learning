@@ -10,12 +10,15 @@
       <h3>Fakulteti i Inxhinierisë Elektrike dhe Kompjuterike</h3>
       <p>Inxhinieri Kompjuterike dhe Softuerike</p>
       <p><strong>Lënda:</strong> Machine Learning</p>
-      <p><strong>Profesor:</strong> Dr. Lule Ahmedi dhe MSc. Mërgim H. HOTI</p>
+      <p><strong>Profesor:</strong> Prof. Dr. Lule AHMEDI </p>
+     <p><strong>Asistent:</strong> Dr. Sc. Mërgim H. HOTI </p>
     </td>
  </tr>
 </table>
 
 ---
+
+# Analiza dhe Parashikimi i Intensitetit të Karbonit në Energjinë Elektrike
 
 ## Përshkrim i përgjithësuar i projektit
 Ky projekt realizohet në kuadër të lëndës “Machine Learning” dhe fokusohet në analizën dhe përpunimin e të dhënave reale të energjisë elektrike në Kosovë. 
