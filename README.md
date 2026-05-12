@@ -466,7 +466,7 @@ Kjo shpjegon pse nje model qe ka performance pak me te mire shpesh eshte ai qe b
 
 #### Klasterizimi i përdorur në `main.ipynb`
 
-Në këtë projekt nuk përdorim Hierarchical Clustering. Në `main.ipynb` është implementuar një krahasim midis dy metodave të tjera të rëndësishme të clustering:
+Në `main.ipynb` është implementuar një krahasim midis dy metodave të tjera të rëndësishme të clustering:
 
 - `K-Means`: grupon të dhënat në bazë të distancës së pikave nga centri i secilit cluster
 - `Gaussian Mixture Model (GMM)`: kap shpërndarje gaussiane të ndjeshme në të dhëna dhe mund të identifikojë klustre të ndryshme në një mënyrë probabilistike
@@ -517,15 +517,15 @@ Sa më afër 1 → cluster-at janë të ndarë mirë
 Rezultati:
 Modeli arriti një Silhouette Score të mirë, që tregon ndarje të kënaqshme të të dhënave pavarësisht overlap-it.
 
-### Krahasimi: K-Means vs Hierarchical
+### Krahasimi: K-Means vs GMM
 
-| Model        | Avantazhet               | Disavantazhet                     |
-|-------------|--------------------------|----------------------------------|
-| K-Means     | i shpejtë, i thjeshtë    | kërkon K paraprakisht             |
-| Hierarchical| nuk kërkon K fillestar   | më i ngadaltë për dataset të mëdha |
+| Model                         | Avantazhet                                                | Disavantazhet                                  |
+|------------------------------|-----------------------------------------------------------|------------------------------------------------|
+| K-Means                      | i shpejtë, i thjeshtë, i përshtatshëm për ndarje lineare  | kërkon K paraprakisht, nuk kap forma të komplikuara |
+| Gaussian Mixture Model (GMM) | kap struktura probabilistike dhe overlap të klustereve    | më i ndërlikuar, kërkon vlerësime të BIC/AIC    |
 
 Rezultati:
-K-Means u përdor si model kryesor për clustering, ndërsa Hierarchical për analizë shtesë dhe validim.
+Në `main.ipynb`, K-Means dhe GMM përdoren për të krahasuar performancën e klasterizimit, dhe përfundimi është se të dyja metodat vlejnë për analizë të ndryshme të dataset-it.
 
 ## Authors
 - *Anjeza Sfishta*
