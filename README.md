@@ -387,144 +387,111 @@ Qëllimi i Clustering
 
 #### Përgatitja e të Dhënave
 
-Për clustering janë përdorur vetëm feature numerike relevante.
+Për clustering përdoren këto feature numerike:
 
-<pre> features = [ 'Carbon intensity gCO₂eq/kWh (direct)', 'Carbon intensity gCO₂eq/kWh (Life cycle)', 'Carbon-free energy percentage (CFE%)', 'Renewable energy percentage (RE%)' ] X = df_no_outliers[features] </pre>
+<pre>feature_cols_clustering = [
+    'Carbon intensity gCO₂eq/kWh (Life cycle)',
+    'Carbon-free energy percentage (CFE%)',
+    'Renewable energy percentage (RE%)',
+    'hour',
+    'day',
+    'month',
+    'weekday'
+]
+X = df_no_outliers[feature_cols_clustering].dropna()</pre>
 
 Për të përmirësuar performancën e algoritmeve, të dhënat janë standardizuar:
 
-<pre> from sklearn.preprocessing import StandardScaler scaler = StandardScaler() X_scaled = scaler.fit_transform(X) </pre>
-K-Means Clustering
+<pre>from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)</pre>
 
-K-Means është një nga algoritmet më të thjeshta dhe më të përdorura për clustering. Ai ndan të dhënat në K grupe, duke minimizuar distancën brenda cluster-it.
+#### Zgjedhja e numrit optimal të cluster-ave
 
-#### Gjetja e numrit optimal të cluster-ave (Elbow Method)
+Në `main.ipynb` është përdorur një kërkim të K nga 2 deri 15 dhe matje të cilësisë së grupimit me metrikat:
 
-<pre> from sklearn.cluster import KMeans import matplotlib.pyplot as plt inertia = [] for k in range(1, 10): kmeans = KMeans(n_clusters=k, random_state=42) kmeans.fit(X_scaled) inertia.append(kmeans.inertia_) plt.plot(range(1, 10), inertia) plt.xlabel("Numri i cluster-ave") plt.ylabel("Inertia") plt.title("Elbow Method") plt.show() </pre>
-Inertia mat sa kompakt janë cluster-at
-Pika ku grafiku fillon të “flatten” është K optimal
+- `Silhouette Score` (më e lartë = ndarje më e mirë)
+- `Davies-Bouldin Index` (më e ulët = ndarje më e mirë)
+- `Calinski-Harabasz Index` (më e lartë = ndarje më e mirë)
 
-Rezultati: U zgjodh një vlerë optimale për K (p.sh. K = 3).
+Rezultatet reale të notebook-ut për dataset-in: `K = 2`.
 
-Trajnimi i modelit K-Means
-<pre> kmeans = KMeans(n_clusters=3, random_state=42) clusters = kmeans.fit_predict(X_scaled) df_no_outliers['cluster'] = clusters </pre>
+#### Trajnimi i modelit K-Means
 
-Rezultati:
+Në vend të një zgjedhjeje arbitrare K = 3, `main.ipynb` bën një vlerësim të plotë dhe zbulon se:
 
-### Tuning i parametrave per Random Forest dhe Gradient Boosting
+- `K = 2`
+- `Silhouette Score = 0.2660`
+- `Davies-Bouldin Index = 1.4387`
+- `Calinski-Harabasz Index` = 3997.50
 
-Ne notebook eshte shtuar nje test me i gjere i parametrave per te provuar jo vetem `n_estimators`, por edhe variabla tjera te rendesishme:
+Kjo tregon se grupimi është i moderuar, por i dobishëm për interpretim dhe ndarje të përgjithshme të ditëve.
 
-- `max_depth`
-- `min_samples_split`
-- `max_features`
-- `bootstrap`
-- `learning_rate`
-- `subsample`
+#### Modelet e përdorura
 
-Kjo ndihmon te kuptohet se si ndryshon performanca kur ndryshohen parametrat kryesor te modeleve.
+Në `main.ipynb` krahasohen dy metoda të rëndësishme për clustering.
 
-#### Pse u testuan keto parametra?
+##### K-Means
 
-- `n_estimators` kontrollon sa peme ose iteracione perdor modeli.
-- `learning_rate` ne Gradient Boosting percakton sa shpejt mesimi perditesohet.
-- `max_depth` dhe `min_samples_split` ndikojne ne thellesine dhe kompleksitetin e pemeve.
-- `max_features` dhe `subsample` reduktojne variancen dhe ndihmojne kunder overfitting.
-- `bootstrap` kontrollon nese Random Forest perdor mostra me zevendesim.
+`K-Means` grupon të dhënat në bazë të distancës së pikave nga centri i secilit cluster. Ai është i shpejtë dhe i përshtatshëm për grupime lineare, por kërkon të paracaktosh numrin e klastereve.
 
-#### Cfare u vu re
+##### Gaussian Mixture Model (GMM)
 
-- Nje rritje e `n_estimators` zakonisht ofron performance me te mire deri ne nje pike stabilizimi.
-- `learning_rate` me i vogel shpesh kerkon `n_estimators` me te larte, por mund te rezultoje ne model me te qendrueshem.
-- `max_depth` me i madh mund te rrise overfitting; per kete dataset, nje thellesi mesatare zakonisht eshte me e sigurt.
-- `max_features='sqrt'` dhe `subsample=0.8` mund te permiresojne stabilitetin pa humbur shume saktesi.
+`Gaussian Mixture Model (GMM)` përdor një përzierje shpërndarjesh Gaussiane dhe ofron një qasje probabilistike për përkatësinë e pikave. Ai mund të kapë overlap dhe struktura më të buta të klastereve, por është më i ndërlikuar dhe kërkon vlerësime AIC/BIC.
 
-#### Si duket krahasimi
+Në kodin aktual, përzgjedhja e numrit optimal të klastereve bëhet me K = 2..15 dhe me metrikan si `Silhouette Score`, `Davies-Bouldin` dhe `Calinski-Harabasz`.
 
-Ne fund te testimit, percaktohet konfigurimi me i mire sipas metrikave te performances dhe shfaqet tabela e rezultateve per secilin kombinim parametrash.
+Rezultatet reale të notebook-ut për K = 2 ishin:
+- K-Means: `Silhouette = 0.2660`, `Davies-Bouldin = 1.4387`, `Calinski-Harabasz = 3997.50`
+- GMM: `Silhouette = 0.1876`, `Davies-Bouldin = 1.3629`, `Calinski-Harabasz = 1659.03`, `BIC = 50502.15`, `AIC = 50000.20`
 
-Kjo menyre testimi eshte me e dobishme per te gjetur kombinimin optimal dhe per te shpjeguar pse disa konfigurime punojne me mire se te tjerat.
-
-#### Si te japim peshe rezultateve
-
-Kur vleresohen konfigurimet, nuk duhet te mbeshtetemi vetem ne `Accuracy`. Duhet te konsiderohen:
-
-- `F1`: balance midis `Precision` dhe `Recall`
-- `Precision`: sa sakte jane parashikimet pozitive
-- `Recall`: sa mire modeli kap rastet pozitive
-- Stabiliteti: nese rezultatet ndryshojne shume per variante te ngjashme
-
-Nese nje konfigurim ka `Accuracy` me te larte dhe gjithashtu `F1`, `Precision` dhe `Recall` te qendrueshme, atehere ai konfigurim konsiderohet me i besueshem.
-
-#### Pse performoi me mire konfigurimi fitues
-
-- Konfigurimi me i mire zakonisht perdor nje balance te mire midis `n_estimators` dhe `max_depth`.
-- `Gradient Boosting` performon me mire kur ka `learning_rate` te moderuar dhe `subsample` te pershtatshem, sepse kap me gradualisht marredheniet komplekse dhe shmang overfitting.
-- `Random Forest` shpesh ishte me i qendrueshem, por `Gradient Boosting` mund te jepte avantazh ne raste ku modeli duhej te mesonte diferenca me te imeta midis `High` dhe `Low`.
-
-Kjo shpjegon pse nje model qe ka performance pak me te mire shpesh eshte ai qe balancon saktesine dhe generalizimin e mire.
-
-#### Klasterizimi i përdorur në `main.ipynb`
-
-Në `main.ipynb` është implementuar një krahasim midis dy metodave të tjera të rëndësishme të clustering:
-
-- `K-Means`: grupon të dhënat në bazë të distancës së pikave nga centri i secilit cluster
-- `Gaussian Mixture Model (GMM)`: kap shpërndarje gaussiane të ndjeshme në të dhëna dhe mund të identifikojë klustre të ndryshme në një mënyrë probabilistike
-
-Në kodin aktual, përzgjedhja e numrit optimal të klustereve bëhet me K = 2..15 dhe me metrikan si `Silhouette Score`, `Davies-Bouldin` dhe `Calinski-Harabasz`.
-
-Kjo qasje është më e saktë për dataset-in aktual, sepse i lejon modelet të krahasohen me njëri-tjetrin dhe të zgjidhet metoda që jep ndarje më të mirë të klustereve.
+Pra, sipas Silhouette Score, K-Means ofron një ndarje më të qartë, ndërsa GMM është më i dobishëm për interpretimin probabilistik të përkatësisë së pikave.
 
 #### Vizualizimi i Cluster-ave
 
-Për interpretim më të lehtë, përdoret reduktimi i dimensioneve (PCA):
+Për interpretim më të lehtë përdoret reduktimi i dimensioneve me PCA dhe shfaqen klasterët në një hapësirë 2D.
 
-<img width="1427" height="847" alt="image" src="https://github.com/user-attachments/assets/ef67af58-47bf-4b3a-818c-d5e2ed290660" />
+**Figura 1: K-Means Clusters në hapësirën PCA**
 
-Ky grafik paraqet:
+<img width="1189" height="790" alt="image" src="https://github.com/user-attachments/assets/d72c929f-ae29-4ffc-9f7c-78eb511bd569" />
 
-çdo pikë = një ditë
-ngjyra = cluster-i përkatës
-Interpretimi i Cluster-ave
 
-Pas analizës së cluster-ave, u identifikuan disa grupe karakteristike:
+Ky grafik tregon ndarjen e dy klastereve të K-Means në bazë të komponenteve kryesore të PCA. Çdo pikë përfaqëson një ditë; ngjyra tregon përkatësinë e saj ndaj klasterit.
 
-- Cluster 0 → ditë me carbon intensity të ulët dhe energji të pastër
-- Cluster 1 → ditë me carbon intensity të lartë dhe më pak energji të rinovueshme
+**Figura 2: Gaussian Mixture Model (GMM) Clusters në hapësirën PCA**
 
-Kjo ndihmon në kuptimin e sjelljes së sistemit energjetik në periudha të ndryshme.
+<img width="1189" height="790" alt="image" src="https://github.com/user-attachments/assets/288a0194-3c69-41c0-af65-2364a7c679ca" />
+
+Ky grafik tregon grumbullimin e klastereve nga GMM me të njëjtën reduktim dimensional. Ai ndihmon të vlerësohet përkatësia probabilistike dhe ndarja e klastereve për krahasim me K-Means.
+
+Pas analizës së klastereve, u identifikuan dy grupe kryesore me karakteristika të ndryshme të carbon intensity dhe përqindjes së energjisë së pastër.
 
 ### Analiza e Mbivendosjes së Cluster-ave (Overlap)
 
-Gjatë vizualizimit të rezultateve të clustering (sidomos pas PCA), vërehet se cluster-at nuk janë plotësisht të ndarë dhe ekziston një overlap midis tyre. Kjo ndodh për disa arsye të rëndësishme:
+Gjatë vizualizimit të rezultateve të clustering vërehet se klasterët nuk janë plotësisht të ndarë dhe ekziston një overlap midis tyre. Kjo është e zakonshme për të dhëna reale të energjisë, pasi:
 
-Natyra reale e të dhënave:
-- Të dhënat e energjisë janë continuous dhe jo të ndara në grupe të qarta.
-- Nuk ekziston një kufi i prerë midis “ditëve me carbon të ulët” dhe “të lartë”
-- Ka shumë ditë që janë “mid-range” dhe bien mes cluster-ave
-
-Pra, overlap është reflektim i realitetit, jo problem i modelit.
+- të dhënat janë `continuous` dhe jo të ndara në grupe të prerë
+- nuk ka një kufi të prerë midis ditëve me intensitet karbonik të ulët dhe të lartë
+- shumë ditë janë në zonën “mid-range” dhe bien në mes të klastereve
 
 ### Vlerësimi i Modeleve (Clustering Metrics)
 
-Në unsupervised learning nuk përdoren Accuracy, Precision, Recall, por metrika të tjera:
+Në unsupervised learning nuk përdoren Accuracy, Precision apo Recall, por metrika që matin strukturën e grupimit:
 
-Silhouette Score
-<pre> from sklearn.metrics import silhouette_score score = silhouette_score(X_scaled, clusters) print("Silhouette Score:", score) </pre>
-Vlerë nga -1 deri në 1
-Sa më afër 1 → cluster-at janë të ndarë mirë
+- `Silhouette Score` nga -1 deri 1: sa më afër 1, aq më mirë ndahen klasterët
+- `Davies-Bouldin Index`: sa më i ulët, aq më të mira janë klasterët
+- `Calinski-Harabasz Index`: sa më i lartë, aq më të forta janë klasteret
 
-Rezultati:
-Modeli arriti një Silhouette Score të mirë, që tregon ndarje të kënaqshme të të dhënave pavarësisht overlap-it.
+Për dataset-in aktual, `Silhouette Score = 0.2660` tregon një ndarje të moderuar, tipike për të dhëna të energjisë me ndryshime graduale.
 
 ### Krahasimi: K-Means vs GMM
 
 | Model                         | Avantazhet                                                | Disavantazhet                                  |
 |------------------------------|-----------------------------------------------------------|------------------------------------------------|
 | K-Means                      | i shpejtë, i thjeshtë, i përshtatshëm për ndarje lineare  | kërkon K paraprakisht, nuk kap forma të komplikuara |
-| Gaussian Mixture Model (GMM) | kap struktura probabilistike dhe overlap të klustereve    | më i ndërlikuar, kërkon vlerësime të BIC/AIC    |
+| Gaussian Mixture Model (GMM) | kap struktura probabilistike dhe overlap të klastereve    | më i ndërlikuar, kërkon vlerësime të BIC/AIC    |
 
-Rezultati:
+Rezultati: Për këtë analizë, K-Means ofron një Silhouette më të mirë dhe një ndarje më të qartë të grupimeve, ndërsa GMM mbetet i dobishëm për interpretimin probabilistik të përkatësisë së pikave në klastere.
 Në `main.ipynb`, K-Means dhe GMM përdoren për të krahasuar performancën e klasterizimit, dhe përfundimi është se të dyja metodat vlejnë për analizë të ndryshme të dataset-it.
 
 ## Authors
