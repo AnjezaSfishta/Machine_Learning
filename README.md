@@ -492,19 +492,53 @@ Në fazën e tretë të projektit, fokusi është në analizën e thellë dhe vl
 
 ### Optimizimi i Hiperparametrave
 
-Për të përmirësuar performancën e modeleve Random Forest dhe Gradient Boosting, është aplikuar Grid Search Cross-Validation për të gjetur kombinimin optimal të hiperparametrave:
+Për të përmirësuar performancën e modeleve **Random Forest** dhe **Gradient Boosting**, është përdorur **Grid Search Cross-Validation** për të testuar kombinime të ndryshme të hiperparametrave dhe për të gjetur konfigurimin optimal.
 
-- **Random Forest**: Optimizimi i parametrave si numri i pemëve (`n_estimators`), thellësia maksimale (`max_depth`), numri minimal i mostrave për ndarje (`min_samples_split`), etj.
-- **Gradient Boosting**: Optimizimi i parametrave si shkalla e mësimit (`learning_rate`), numri i pemëve, thellësia maksimale, etj.
+Janë testuar parametrat kryesorë:
 
-Ky proces siguron që modelet të arrijnë potencialin maksimal të tyre.
+- `n_estimators`
+- `max_depth`
+- `min_samples_split`
+- `max_features`
+- `bootstrap`
+- `learning_rate`
+- `subsample`
+
+Këta parametra ndikojnë drejtpërdrejt në kompleksitetin, stabilitetin dhe aftësinë e modelit për të generalizuar të dhënat.
+
+- `n_estimators` kontrollon numrin e pemëve ose iteracioneve të modelit.
+- `learning_rate` përcakton shpejtësinë e përditësimit të modelit në Gradient Boosting.
+- `max_depth` dhe `min_samples_split` ndikojnë në thellësinë dhe strukturën e pemëve.
+- `max_features` dhe `subsample` ndihmojnë në reduktimin e overfitting.
+- `bootstrap` kontrollon nëse Random Forest përdor mostra me zëvendësim.
+
+Rezultatet treguan se rritja e `n_estimators` zakonisht përmirëson performancën deri në një pikë stabilizimi, ndërsa `learning_rate` më i ulët mund të krijojë modele më të qëndrueshme. Gjithashtu, një `max_depth` shumë i madh mund të shkaktojë overfitting, prandaj konfigurimet me thellësi mesatare rezultuan më efektive për këtë dataset.
+
+Në fund të testimit, u përzgjodh konfigurimi me performancën më të mirë bazuar në Accuracy, F1-score, Precision dhe Recall.
 
 <img width="1045" height="74" alt="image" src="https://github.com/user-attachments/assets/433195ce-7847-4820-9f04-2484ba49e5b3" />
 <img width="1012" height="76" alt="image" src="https://github.com/user-attachments/assets/4ecb3b59-ced4-493a-9bf8-175a0ff88248" />
 
+
 ### Cross-Validation dhe Vlerësimi i Stabilitetit
 
-Për të vlerësuar stabilitetin dhe përgjithësimin e modeleve, është përdorur 10-fold cross-validation. Kjo teknikë ndan dataset-in në 10 pjesë dhe trajnon modelin 10 herë, duke përdorur çdo pjesë si test set një herë. Rezultatet tregojnë variancën e performancës dhe ndihmojnë në identifikimin e overfitting-ut.
+Për të analizuar stabilitetin dhe aftësinë e modeleve për të generalizuar të dhënat, është përdorur **10-fold cross-validation**. Dataset-i ndahet në 10 pjesë, ku modeli trajnohet dhe testohet disa herë duke përdorur kombinime të ndryshme të të dhënave.
+
+Ky proces ndihmon në:
+
+- identifikimin e overfitting-ut,
+- analizimin e stabilitetit të modelit,
+- dhe krahasimin më realist të performancës.
+
+Gjatë vlerësimit nuk është përdorur vetëm Accuracy, por edhe:
+
+- **F1-score** – balanca midis Precision dhe Recall,
+- **Precision** – saktësia e parashikimeve pozitive,
+- **Recall** – aftësia për të kapur rastet pozitive.
+
+Një konfigurim konsiderohet më i besueshëm kur ruan rezultate të larta dhe stabile në të gjitha metrikat.
+
+Rezultatet treguan se **Gradient Boosting** arriti performancë pak më të lartë në disa raste, ndërsa **Random Forest** rezultoi më stabil dhe më rezistent ndaj overfitting-ut.
 
 <img width="1036" height="245" alt="image" src="https://github.com/user-attachments/assets/cfb36e07-afb0-49b5-9fd7-ad12bed69d1b" />
 
