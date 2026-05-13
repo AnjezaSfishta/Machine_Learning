@@ -499,9 +499,14 @@ Për të përmirësuar performancën e modeleve Random Forest dhe Gradient Boost
 
 Ky proces siguron që modelet të arrijnë potencialin maksimal të tyre.
 
+<img width="1045" height="74" alt="image" src="https://github.com/user-attachments/assets/433195ce-7847-4820-9f04-2484ba49e5b3" />
+<img width="1012" height="76" alt="image" src="https://github.com/user-attachments/assets/4ecb3b59-ced4-493a-9bf8-175a0ff88248" />
+
 ### Cross-Validation dhe Vlerësimi i Stabilitetit
 
 Për të vlerësuar stabilitetin dhe përgjithësimin e modeleve, është përdorur 10-fold cross-validation. Kjo teknikë ndan dataset-in në 10 pjesë dhe trajnon modelin 10 herë, duke përdorur çdo pjesë si test set një herë. Rezultatet tregojnë variancën e performancës dhe ndihmojnë në identifikimin e overfitting-ut.
+
+<img width="1036" height="245" alt="image" src="https://github.com/user-attachments/assets/cfb36e07-afb0-49b5-9fd7-ad12bed69d1b" />
 
 ### Metrika të Detajuara të Performancës
 
@@ -509,6 +514,28 @@ Modelet e optimizuara janë vlerësuar në test set me metrika gjithëpërfshir�
 - **Raporti i Klasifikimit**: Precision, Recall, F1-Score për çdo klasë
 - **Matrica e Konfuzionit**: Numri i parashikimeve të sakta dhe gabimeve
 - **ROC Curves dhe AUC**: Aftësia e dallimit midis klasave në pragje të ndryshme
+
+Në grafik janë krahasuar dy algoritme të machine learning:
+
+- Random Forest – me vlerë AUC = 0.9999
+- Gradient Boosting – me vlerë AUC = 1.0000
+
+<img width="830" height="654" alt="image" src="https://github.com/user-attachments/assets/7b653807-b4d8-4993-bceb-aa3dd8fabd0a" />
+
+Boshti horizontal (X-axis) paraqet False Positive Rate (FPR), ndërsa boshti vertikal (Y-axis) paraqet True Positive Rate (TPR).
+Vija e zezë me pika paraqet performancën e një klasifikuesi të rastësishëm (random classifier). Sa më larg kësaj vije dhe sa më afër këndit të sipërm majtas të jetë kurba, aq më i mirë është modeli.
+
+Nga figura shihet se të dy modelet kanë performancë shumë të lartë, pasi kurbat e tyre janë pothuajse në këndin e sipërm majtas. Kjo tregon se modelet arrijnë të dallojnë klasat me saktësi pothuajse perfekte.
+
+Vlera AUC (Area Under the Curve) mat cilësinë e modelit:
+
+- AUC afër 1 → model shumë i mirë
+- AUC afër 0.5 → model i dobët ose rastësor
+
+Në këtë rast:
+
+- Gradient Boosting ka performancën më të mirë me AUC = 1.0000.
+- Random Forest gjithashtu ka rezultat pothuajse perfekt me AUC = 0.9999.
 
 ### Analiza e Rëndësisë së Feature-ve
 
@@ -521,6 +548,20 @@ Përdorimi i teknikave të interpretimit të modeleve për të identifikuar cila
 
 #### Learning Curves
 Analiza e kurvave të mësimit për të vlerësuar si performojnë modelet me sasi të ndryshme të dhënash trajnuese dhe për të identifikuar nëse ka nevojë për më shumë të dhëna ose për të zvogëluar kompleksitetin e modelit.
+
+- Learning Curve – Gradient Boosting
+  
+<img width="1034" height="650" alt="image" src="https://github.com/user-attachments/assets/118d649d-f126-4cb6-98a8-0967721fb8ad" />
+
+Grafiku paraqet performancën e modelit Gradient Boosting gjatë trajnimit.
+Vija blu tregon training score, ndërsa vija e kuqe cross-validation score. Me rritjen e të dhënave të trajnimit, modeli ruan performancë shumë të lartë dhe validation score përmirësohet gradualisht. Diferenca e vogël mes dy vijave tregon se modeli generalizon mirë dhe ka shumë pak overfitting.
+
+- Learning Curve – Random Forest
+
+ <img width="1029" height="647" alt="image" src="https://github.com/user-attachments/assets/2fb5b7e7-c2c4-43cb-973a-0cc3f1336208" />
+
+Grafiku paraqet learning curve për algoritmin Random Forest.
+Training score dhe cross-validation score rriten gradualisht me shtimin e të dhënave. Diferenca e vogël mes tyre tregon performancë stabile dhe generalizim të mirë të modelit. Random Forest jep rezultate shumë të mira, megjithëse pak më të ulëta se Gradient Boosting.
 
 #### Model Calibration
 Kalibrimi i probabiliteteve të parashikuara për të siguruar që ato përfaqësojnë besueshmërinë reale. Kjo është e rëndësishme për vendimmarrje të bazuara në probabilitete.
