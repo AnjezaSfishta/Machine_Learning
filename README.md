@@ -406,16 +406,6 @@ Për të përmirësuar performancën e algoritmeve, të dhënat janë standardiz
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)</pre>
 
-#### Zgjedhja e numrit optimal të cluster-ave
-
-Në `main.ipynb` është përdorur një kërkim të K nga 2 deri 15 dhe matje të cilësisë së grupimit me metrikat:
-
-- `Silhouette Score` (më e lartë = ndarje më e mirë)
-- `Davies-Bouldin Index` (më e ulët = ndarje më e mirë)
-- `Calinski-Harabasz Index` (më e lartë = ndarje më e mirë)
-
-Rezultatet reale të notebook-ut për dataset-in: `K = 2`.
-
 #### Modelet e përdorura
 
 Në `main.ipynb` krahasohen dy metoda të rëndësishme për clustering.
