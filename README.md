@@ -532,11 +532,21 @@ Kalibrimi i probabiliteteve të parashikuara për të siguruar që ato përfaqë
 #### Feature Selection
 Përdorimi i algoritmeve si SelectKBest për të zgjedhur feature-t më të rëndësishme bazuar në teste statistikore ANOVA F-test.
 
-#### Error Analysis
-Analiza e thellë e gabimeve të modelit për të identifikuar:
-- Pattern-e në gabimet
-- Feature që kontribuojnë në gabime
-- Mundësi për përmirësim të mëtejshëm
+#### Analiza e Gabimeve (Error Analysis)
+
+Për të kuptuar ku modelet gabojnë, është kryer analiza e gabimeve duke përdorur krahasimin e feature-ve të standardizuara për rastet e gabuara vs të gjitha të dhënat test.
+
+**Random Forest:**
+- Numri i gabimeve: 6 (0.35% shkalla gabimi)
+- Gabimet ndodhin kryesisht kur feature-t kohore (hour, month) kanë vlera negative standardizuara, ndërsa ditët e muajit kanë vlera pozitive
+- Krahasimi tregon se gabimet kanë mesatare më negative për energjinë e rinovueshme dhe CFE%, duke treguar se modelet gabojnë më shumë për ditë me energji më pak të pastër
+
+**Gradient Boosting:**
+- Numri i gabimeve: 6 (0.35% shkalla gabimi)
+- Profile i ngjashëm me Random Forest, por me theks më të madh në muaj dhe ditë të javës
+- Gabimet janë minimale dhe ndodhin në raste kufitare ku intensiteti i karbonit është afër medianës
+
+Rezultati: Të dy modelet kanë shkallë gabimi shumë të ulët (<0.4%), duke konfirmuar performancën e tyre të lartë dhe stabilitetin.
 
 ### Rezultatet dhe Përfundimet
 
