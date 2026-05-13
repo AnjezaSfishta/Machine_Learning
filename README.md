@@ -484,6 +484,74 @@ Për dataset-in aktual, `Silhouette Score = 0.2660` tregon një ndarje të moder
 Rezultati: Për këtë analizë, K-Means ofron një Silhouette më të mirë dhe një ndarje më të qartë të grupimeve, ndërsa GMM mbetet i dobishëm për interpretimin probabilistik të përkatësisë së pikave në klastere.
 Në `main.ipynb`, K-Means dhe GMM përdoren për të krahasuar performancën e klasterizimit, dhe përfundimi është se të dyja metodat vlejnë për analizë të ndryshme të dataset-it.
 
+---
+
+## Faza e tretë - Analiza dhe evaluimi (ri-trajnimi) dhe aplikimi i veglave të ML
+
+Në fazën e tretë të projektit, fokusi është në analizën e thellë dhe vlerësimin e modeleve të trajnuara nga faza e dytë. Kjo përfshin ri-trajnim me optimizim të hiperparametrave, aplikimin e teknikave të avancuara të Machine Learning dhe interpretimin e rezultateve për të nxjerrë përfundime praktike.
+
+### Optimizimi i Hiperparametrave
+
+Për të përmirësuar performancën e modeleve Random Forest dhe Gradient Boosting, është aplikuar Grid Search Cross-Validation për të gjetur kombinimin optimal të hiperparametrave:
+
+- **Random Forest**: Optimizimi i parametrave si numri i pemëve (`n_estimators`), thellësia maksimale (`max_depth`), numri minimal i mostrave për ndarje (`min_samples_split`), etj.
+- **Gradient Boosting**: Optimizimi i parametrave si shkalla e mësimit (`learning_rate`), numri i pemëve, thellësia maksimale, etj.
+
+Ky proces siguron që modelet të arrijnë potencialin maksimal të tyre.
+
+### Cross-Validation dhe Vlerësimi i Stabilitetit
+
+Për të vlerësuar stabilitetin dhe përgjithësimin e modeleve, është përdorur 10-fold cross-validation. Kjo teknikë ndan dataset-in në 10 pjesë dhe trajnon modelin 10 herë, duke përdorur çdo pjesë si test set një herë. Rezultatet tregojnë variancën e performancës dhe ndihmojnë në identifikimin e overfitting-ut.
+
+### Metrika të Detajuara të Performancës
+
+Modelet e optimizuara janë vlerësuar në test set me metrika gjithëpërfshirëse:
+- **Raporti i Klasifikimit**: Precision, Recall, F1-Score për çdo klasë
+- **Matrica e Konfuzionit**: Numri i parashikimeve të sakta dhe gabimeve
+- **ROC Curves dhe AUC**: Aftësia e dallimit midis klasave në pragje të ndryshme
+
+### Analiza e Rëndësisë së Feature-ve
+
+Përdorimi i teknikave të interpretimit të modeleve për të identifikuar cilat feature kanë ndikim më të madh në vendimet e modelit. Kjo ndihmon në:
+- Kuptimin e faktorëve kryesorë që ndikojnë në intensitetin e karbonit
+- Mundësinë e reduktimit të dimensionit duke hequr feature të parëndësishme
+- Interpretimin e rezultateve për ekspertët e domenit
+
+### Aplikimi i Veglave Shtesë të Machine Learning
+
+#### Learning Curves
+Analiza e kurvave të mësimit për të vlerësuar si performojnë modelet me sasi të ndryshme të dhënash trajnuese dhe për të identifikuar nëse ka nevojë për më shumë të dhëna ose për të zvogëluar kompleksitetin e modelit.
+
+#### Model Calibration
+Kalibrimi i probabiliteteve të parashikuara për të siguruar që ato përfaqësojnë besueshmërinë reale. Kjo është e rëndësishme për vendimmarrje të bazuara në probabilitete.
+
+#### Ensemble Methods
+- **Voting Classifier**: Kombinimi i parashikimeve nga Random Forest dhe Gradient Boosting për të përmirësuar stabilitetin dhe performancën
+- **Soft Voting**: Përdorimi i probabiliteteve për votim të ponderuar
+
+#### Feature Selection
+Përdorimi i algoritmeve si SelectKBest për të zgjedhur feature-t më të rëndësishme bazuar në teste statistikore ANOVA F-test.
+
+#### Error Analysis
+Analiza e thellë e gabimeve të modelit për të identifikuar:
+- Pattern-e në gabimet
+- Feature që kontribuojnë në gabime
+- Mundësi për përmirësim të mëtejshëm
+
+### Rezultatet dhe Përfundimet
+
+Pas optimizimit dhe analizës së thellë, modelet arrijnë performancë shumë të lartë (>99% accuracy), duke konfirmuar efektivitetin e tyre për klasifikimin e intensitetit të karbonit. Rezultatet tregojnë se:
+
+- Modelet janë të qëndrueshme dhe nuk vuajnë nga overfitting
+- Feature-t kryesore si intensiteti i karbonit dhe përqindja e energjisë së rinovueshme kanë ndikim dominues
+- Teknikat e optimizimit përmirësojnë performancën edhe pse fillimisht ishte shumë e lartë
+- Ensemble methods ofrojnë performancë edhe më të mirë
+- Learning curves tregojnë që modelet përgjithësojnë mirë
+- Model calibration siguron probabilitete të besueshme
+- Error analysis ndihmon në identifikimin e zonave për përmirësim
+
+Kjo fazë përfundon projektin duke siguruar që modelet jo vetëm performojnë mirë, por janë edhe të interpretueshme dhe të gatshme për aplikim praktik në parashikimin e energjisë së qëndrueshme.
+
 ## Authors
 - *Anjeza Sfishta*
 - *Erza Merovci*
