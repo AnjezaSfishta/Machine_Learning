@@ -416,17 +416,6 @@ Në `main.ipynb` është përdorur një kërkim të K nga 2 deri 15 dhe matje t�
 
 Rezultatet reale të notebook-ut për dataset-in: `K = 2`.
 
-#### Trajnimi i modelit K-Means
-
-Në vend të një zgjedhjeje arbitrare K = 3, `main.ipynb` bën një vlerësim të plotë dhe zbulon se:
-
-- `K = 2`
-- `Silhouette Score = 0.2660`
-- `Davies-Bouldin Index = 1.4387`
-- `Calinski-Harabasz Index` = 3997.50
-
-Kjo tregon se grupimi është i moderuar, por i dobishëm për interpretim dhe ndarje të përgjithshme të ditëve.
-
 #### Modelet e përdorura
 
 Në `main.ipynb` krahasohen dy metoda të rëndësishme për clustering.
@@ -446,6 +435,17 @@ Rezultatet reale të notebook-ut për K = 2 ishin:
 - GMM: `Silhouette = 0.1876`, `Davies-Bouldin = 1.3629`, `Calinski-Harabasz = 1659.03`, `BIC = 50502.15`, `AIC = 50000.20`
 
 Pra, sipas Silhouette Score, K-Means ofron një ndarje më të qartë, ndërsa GMM është më i dobishëm për interpretimin probabilistik të përkatësisë së pikave.
+
+#### Trajnimi i modelit K-Means
+
+Në vend të një zgjedhjeje arbitrare K = 3, `main.ipynb` bën një vlerësim të plotë dhe zbulon se:
+
+- `K = 2`
+- `Silhouette Score = 0.2660`
+- `Davies-Bouldin Index = 1.4387`
+- `Calinski-Harabasz Index` = 3997.50
+
+Kjo tregon se grupimi është i moderuar, por i dobishëm për interpretim dhe ndarje të përgjithshme të ditëve.
 
 #### Vizualizimi i Cluster-ave
 
